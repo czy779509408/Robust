@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-project.archivesBaseName = 'robust'
+apply plugin: 'maven'
+
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.2'
@@ -30,6 +31,20 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 dependencies {
-    compile 'com.meituan.robust:autopatchbase:0.5.1'
+    compile 'com.yh.robust:autopatchbase:0.5.0'
 //    compile project(':autopatchbase')
+}
+
+uploadArchives{
+    repositories {
+        mavenDeployer {
+            pom.version = VERSION_NAME
+            pom.artifactId = "robust"
+            pom.groupId = GROUP
+
+            repository(url: REPOSITORY) {
+                authentication(userName: USER_NAME, password: PASSWORD)
+            }
+        }
+    }
 }

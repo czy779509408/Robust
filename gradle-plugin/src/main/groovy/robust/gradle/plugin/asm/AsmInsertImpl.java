@@ -51,16 +51,23 @@ public class AsmInsertImpl extends InsertcodeStrategy {
         ZipOutputStream outStream = new JarOutputStream(new FileOutputStream(jarFile));
         //get every class in the box ,ready to insert code
         for (CtClass ctClass : box) {
-            //change modifier to public ,so all the class in the apk will be public ,you will be able to access it in the patch
-            ctClass.setModifiers(AccessFlag.setPublic(ctClass.getModifiers()));
-            if (isNeedInsertClass(ctClass.getName()) && !(ctClass.isInterface() || ctClass.getDeclaredMethods().length < 1)) {
-                //only insert code into specific classes
-                zipFile(transformCode(ctClass.toBytecode(), ctClass.getName().replaceAll("\\.", "/")), outStream, ctClass.getName().replaceAll("\\.", "/") + ".class");
-            } else {
-                zipFile(ctClass.toBytecode(), outStream, ctClass.getName().replaceAll("\\.", "/") + ".class");
-
+            if(ctClass.getName().contains("META-INF")) {
+                continue;
             }
-            ctClass.defrost();
+            try {
+                //change modifier to public ,so all the class in the apk will be public ,you will be able to access it in the patch
+                ctClass.setModifiers(AccessFlag.setPublic(ctClass.getModifiers()));
+                if (isNeedInsertClass(ctClass.getName()) && !(ctClass.isInterface() || ctClass.getDeclaredMethods().length < 1)) {
+                    //only insert code into specific classes
+                    zipFile(transformCode(ctClass.toBytecode(), ctClass.getName().replaceAll("\\.", "/")), outStream, ctClass.getName().replaceAll("\\.", "/") + ".class");
+                } else {
+                    zipFile(ctClass.toBytecode(), outStream, ctClass.getName().replaceAll("\\.", "/") + ".class");
+
+                }
+                ctClass.defrost();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }
         outStream.close();
     }
