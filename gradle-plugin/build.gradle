@@ -1,7 +1,7 @@
 apply plugin: 'groovy'
 compileGroovy {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 }
 dependencies {
     compile gradleApi()
@@ -14,4 +14,3 @@ dependencies {
     compile 'org.ow2.asm:asm:5.0.1'
 }
 
-apply from: '../gradle_mvn_push.gradle'
