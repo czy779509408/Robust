@@ -30,6 +30,6 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 dependencies {
-//    compile 'com.meituan.robust:autopatchbase:' + VERSION_NAME
-    compile project(':autopatchbase')
+    compile 'com.meituan.robust:autopatchbase:0.5.1'
+//    compile project(':autopatchbase')
 }
